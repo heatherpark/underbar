@@ -181,24 +181,16 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-    if (accumulator === undefined) {
-      // set accumulator to first item in "collection".
-      accumulator = collection[0];
-      // remove first item from collection to perform each() function on second item onward.
-      collection = collection.slice(1);
+    var accumulatorUndefined = accumulator === undefined;
 
-      _.each(collection, function(item) {
-        // pass the current "accumulator" value and current item in loop as arguments to iterator().
-        // run iterator() on each item and set its returned value as the new value of "accumulator".
+    _.each(collection, function(item) {
+      if (accumulatorUndefined) {
+        accumulator = _.first(collection);
+        accumulatorUndefined = false;
+      } else {
         accumulator = iterator(accumulator, item);
-      });
-    // in the event that an argument was passed to "accumulator"
-    } else {
-      // run the same each() function as above
-      _.each(collection, function(item) {
-        accumulator = iterator(accumulator, item);
-      });
-    }
+      }
+    });
 
     return accumulator;
   };
