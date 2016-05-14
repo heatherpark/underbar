@@ -114,6 +114,20 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+    // create empty array that will later hold an array of unique items.
+    var unique = [];
+
+    _.each(array, function(item, index) {
+      // indexOf() only returns the index of the first instance of an item in an array.
+      // thus, the current item's index can be compared to its indexOf() result.
+      // if they match, that item can be pushed to "unique".
+      // any subsequent instances' indices won't be equal to indexOf() and will not be pushed to "unique".
+      if (_.indexOf(array, item) === index) {
+        unique.push(item);
+      }
+    });
+
+    return unique;
   };
 
 
