@@ -221,9 +221,7 @@
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
-    if (iterator === undefined) {
-      iterator = _.identity;
-    }
+    iterator = iterator || _.identity;
 
     // every() will return the returned value of reduce().
     // the default "accumulator" value will be set to true.
@@ -237,7 +235,7 @@
         return false;
       }
 
-      return Boolean(iterator(item));
+      return !!iterator(item);
     }, true);
   };
 
