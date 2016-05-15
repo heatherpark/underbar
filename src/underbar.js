@@ -347,6 +347,31 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    // create "cache" in outer function to take advantage of closure.
+    // this will be stored with arguments and their return values.
+    var cache = {};
+
+    // this returned function will delegate to "func".
+    return function() {
+      // differentiate between arguments that are passed as arrays or list of arguments.
+      // store with different property names in "cache".
+      if (Array.isArray(arguments[0])) {
+        var args = "array " + Array.prototype.slice.call(arguments);
+      } else {
+        var args = Array.prototype.slice.call(arguments);
+      }
+
+      // check if specific set of arguments is found in cache.
+      // if so, return its value.
+      // if not, add to cache and return its value.
+      if (args in cache) {
+        return cache[args];
+      } else {
+        cache[args] = func.apply(this, arguments);
+        return cache[args];
+      }
+    };
+
   };
 
   // Delays a function for the given number of milliseconds, and then calls
