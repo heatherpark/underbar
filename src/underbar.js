@@ -275,6 +275,19 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    // use slice() method on array prototype to slice arguments from second item onward.
+    var objects = Array.prototype.slice.call(arguments, 1);
+
+    // loop through "objects".
+    _.each(objects, function(object) {
+      // within each object in "objects", loop through all properties.
+      _.each(object, function(value, key) {
+        // add property and value to "obj".
+        obj[key] = value;
+      });
+    });
+
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
