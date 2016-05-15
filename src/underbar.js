@@ -392,7 +392,27 @@
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
+
+  // the shuffle method will use the Fisher-Yates algorithm for an
+  // unbiased, randomized shuffle of array contents
   _.shuffle = function(array) {
+    // make copy of array using slice method
+    var arrayCopy = array.slice();
+
+    // loop over all items in arrayCopy, starting from last item.
+    for (var i = arrayCopy.length - 1; i >= 0; i--) {
+      // for each item, generate random number between 0 (inclusive) and the current loop's index (inclusive).
+      var randomIndex = Math.floor(Math.random() * i);
+      // this randomly selected number will be the new index of the current item.
+      var randomIndexItem = arrayCopy[randomIndex];
+
+      // essentially, we're swapping positions of the current
+      // item and the item at the randomly selected position.
+      arrayCopy[randomIndex] = arrayCopy[i];
+      arrayCopy[i] = randomIndexItem;
+    }
+
+    return arrayCopy;
   };
 
 
