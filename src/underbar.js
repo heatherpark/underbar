@@ -91,7 +91,7 @@
     var filtered = [];
 
     // loop over each item and invoke "test" function.
-    _.each(collection, function(item) {
+    _.each(collection, function(item, index, collection) {
       // if "test" function returns true, push item to "filtered" array.
       if (test(item)) {
         filtered.push(item);
@@ -114,20 +114,21 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
-    // create empty array that will later hold an array of unique items.
-    var unique = [];
+    // create empty array that will later hold an array of unique items
+    var uniqueArr = [];
 
+    // iterate over each item in array
     _.each(array, function(item, index) {
-      // indexOf() only returns the index of the first instance of an item in an array.
-      // thus, the current item's index can be compared to its indexOf() result.
-      // if they match, that item can be pushed to "unique".
-      // any subsequent instances' indices won't be equal to indexOf() and will not be pushed to "unique".
+      // indexOf only returns the index of the first instance of an item in an array.
+      // thus, the current item's index can be compared to its indexOf result.
+      // if they match, that item can be pushed to uniqueArr
+      // any subsequent instances' indices won't be equal to indexOf and will not be pushed to uniqueArr.
       if (_.indexOf(array, item) === index) {
-        unique.push(item);
+        uniqueArr.push(item);
       }
     });
 
-    return unique;
+    return uniqueArr;
   };
 
 
@@ -181,13 +182,23 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    // if no argument is passed to "accumulator" parameter,
+    // "accumulatorUndefined" will evaluate to true.
     var accumulatorUndefined = accumulator === undefined;
 
+    // loop through each item in "collection".
     _.each(collection, function(item) {
+      // if "accumulator" is undefined,
+      // or "accumulatorUndefined" evaluates to true...
       if (accumulatorUndefined) {
+        // set the value of "accumulator" to the first item in "collection".
         accumulator = _.first(collection);
+        // set "accumulatorUndefined" to false.
+        // this will allow the loop to continue through all items.
         accumulatorUndefined = false;
       } else {
+        // pass the current "accumulator" value and current item in loop as arguments to iterator().
+        // run iterator() on each item and set its returned value as the new value of "accumulator".
         accumulator = iterator(accumulator, item);
       }
     });
@@ -210,7 +221,24 @@
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
+    if (iterator === undefined) {
+      iterator = _.identity;
+    }
+
+    // every() will return the returned value of reduce().
+    // the default "accumulator" value will be set to true.
+    // for every item in "collection", return the Boolean value of invoking the iterator on the item and
+    // have that be the new value for "accumulator".
+    // that value will then be passed to "doesMatch".
+    // in the event that a value of false is passed to "doesMatch", reduce() immediately returns false.
+    // otherwise, it will loop all the way through "collection" and ultimately return true.
+    return _.reduce(collection, function(doesMatch, item) {
+      if (!doesMatch) {
+        return false;
+      }
+
+      return Boolean(iterator(item));
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
