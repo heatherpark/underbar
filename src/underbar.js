@@ -242,7 +242,17 @@
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
-    // TIP: There's a very clever way to re-use every() here.
+    iterator = iterator || _.identity;
+
+    // some() will return true when the first item that passes the truth test is found.
+
+    // every() will test for the inverse of what "iterator" is testing.
+    // thus, when every() lands on an item that does, in fact, pass "iterator"'s truth test,
+    // every() will return false.
+    // however, some() will return the inverse of every()'s returned value.
+    return !(_.every(collection, function(item) {
+      return !iterator(item);
+    }));
   };
 
 
