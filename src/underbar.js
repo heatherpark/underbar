@@ -427,6 +427,18 @@
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+    // check if "functionOrKey" is function or method.
+    // if a method is passed, its type will evaluate to a string.
+    var isFunction = typeof(functionOrKey) === "function";
+
+    // map will return a new array of transformed items.
+    return _.map(collection, function(item) {
+      // if "functionOrKey" is a function, it will be used as is.
+      // if it is a method, it will be searched for on the item's prototype.
+      var iterator = isFunction ? functionOrKey : item[functionOrKey];
+      // use apply() on the iterator to set the 'this' value, which is each respective item.
+      return iterator.apply(item, args);
+    });
   };
 
   // Sort the object's values by a criterion produced by an iterator.
