@@ -499,6 +499,20 @@
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
+    var arrays = Array.prototype.slice.call(arguments).sort(function(a, b) { return b.length - a.length; });
+    var longestArray = _.first(arrays);
+    arrays = arrays.slice(1);
+    var output = [];
+
+    _.each(longestArray, function(target) {
+      _.each(arrays, function(array) {
+        if (_.indexOf(array, target) !== -1) {
+          output.push(target);
+        }
+      });
+    });
+
+    return output;
   };
 
   // Take the difference between one array and a number of other arrays.
