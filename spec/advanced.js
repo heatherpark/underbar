@@ -58,7 +58,6 @@
       it('should sort by length', function() {
         var list = ['one', 'two', 'three', 'four', 'five'];
         var sorted = _.sortBy(list, 'length');
-        console.log(sorted);
 
         expect(sorted).to.eql(['one', 'two', 'four', 'five', 'three']);
       });
