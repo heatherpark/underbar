@@ -518,6 +518,17 @@
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+    var output = [];
+
+    var overlaps = _.intersection.apply(this, arguments);
+
+    _.each(array, function(item) {
+      if (_.indexOf(overlaps, item) === -1) {
+        output.push(item);
+      }
+    });
+
+    return output;
   };
 
   // Returns a function, that, when invoked, will only be triggered at most once
