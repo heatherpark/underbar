@@ -464,9 +464,11 @@
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
   _.zip = function() {
     var arrays = Array.prototype.slice.call(arguments);
+
     arrays.sort(function(a, b) {
       return b.length - a.length;
     });
+
     var longestArray = _.first(arrays);
     var output = [];
 
@@ -476,7 +478,7 @@
         output[outputIndex].push(array[outputIndex]);
       });
     });
-    console.log(output);
+
     return output;
   };
 
@@ -485,6 +487,13 @@
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
+    result = result || [];
+
+    _.each(nestedArray, function(item) {
+      Array.isArray(item) ? _.flatten(item, result) : result.push(item);
+    });
+
+    return result;
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
